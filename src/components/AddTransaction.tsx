@@ -1,15 +1,23 @@
 import {useState, useContext, useReducer} from 'react';
-import {TransactionContext} from '../context/TransactionContext';
+import TransactionContext from '../context/TransactionContext';
 import { useNavigate } from 'react-router-dom';
+import {TransactionForm} from '../types'
 
+type Action =
+| { type: "UPDATE_FIELD"; payload: { name: string; value: string } }
+| { type: "SET_ERRORS"; payload: Partial<TransactionForm> }
+| { type: "RESET" }
 
 export default function AddTransaction(){
-    const {transaction, setTransaction} = useContext(TransactionContext);
+
+    const context = useContext(TransactionContext);
     const navigate = useNavigate();
+    if(!context) return <div>Loading...</div>
+    const {transaction, setTransaction} = context;
     
-    const initialState = {
+    const initialState: TransactionForm = {
         description: "",
-        amount: "",
+        amount: 0,
         category: "",
         date: "",
         descriptionError: "",
@@ -18,7 +26,7 @@ export default function AddTransaction(){
         dateError: ""
     }
 
-    function reducer(state, action){
+    function reducer(state: TransactionForm, action: Action): TransactionForm{
         switch(action.type){
             case "UPDATE_FIELD":
                 return {...state, [action.payload.name]: action.payload.value};
@@ -29,14 +37,14 @@ export default function AddTransaction(){
         }
     }
 
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, initialState)
 
-    function handleSubmit(e){
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>){
         e.preventDefault();
 
-        if(state.description === "" || state.category === "" || state.date === "" || state.amount === ""){
+        if(state.description === "" || (state.category !== "Income" && state.category !== "Expenses") || state.date === "" || state.amount === 0){
             dispatch({type: "SET_ERRORS", payload: {descriptionError: state.description === "" ? "Enter Description" : "",
-                amountError: state.amount === "" ? "Enter Amount" : "",
+                amountError: state.amount === 0 ? "Enter Amount" : "",
                 categoryError: state.category === "" ? "Enter Category" : "", 
                 dateError: state.date === "" ? "Enter Date" : ""
             } });
@@ -46,7 +54,7 @@ export default function AddTransaction(){
 
         const nextID = Math.max(...transaction.map(item => item.id), 0) + 1;
 
-        setTransaction([...transaction, {id: nextID, description: state.description, amount:state.amount, category: state.category, date: state.date}]);
+        setTransaction([...transaction, {id: nextID, description: state.description, amount: Number(state.amount), category: state.category, date: state.date}]);
         alert("New Transaction Added Successfully")
         navigate('/transactions');
     }
@@ -74,11 +82,10 @@ export default function AddTransaction(){
                     />
                     <p className='form-error'>{state.amountError}</p>
 
-                    <select type="text"
+                    <select 
                     name="category"
                     className='form-input'                    
                     value={state.category}
-                    placeholder="Enter Category"
                     onChange={(e)=> dispatch({type: "UPDATE_FIELD", payload: {name: "category", value:e.target.value}})}
                     >
                         <option value="">Select Category</option>

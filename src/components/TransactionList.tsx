@@ -1,15 +1,18 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { TransactionContext } from '../context/TransactionContext';
+import  TransactionContext  from '../context/TransactionContext';
 
 export default function TransactionList() {
-    const { transaction } = useContext(TransactionContext);
+    const context = useContext(TransactionContext)
+    if(!context) return <div>Loading</div>
+    const { transaction } = context;
 
     if (!transaction.length) return (
         <div className="page">
             <p className="empty-state">No transactions yet. Add one!</p>
         </div>
     );
+
 
     return (
         <div className="page">

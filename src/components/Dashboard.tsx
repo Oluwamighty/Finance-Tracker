@@ -1,17 +1,19 @@
 import { useContext } from "react";
-import {TransactionContext} from "../context/TransactionContext";
+import TransactionContext from "../context/TransactionContext";
 
 export default function Dashboard(){
+    const context = useContext(TransactionContext);
 
-    const {transaction, setTransaction} = useContext(TransactionContext);
+    if(!context) return <div>Loading...</div>
+    const {transaction, setTransaction} = context;
 
     const income = transaction.filter(amount=>amount.category === "Income");
     const expenses = transaction.filter(amount=>amount.category === "Expenses");
 
-    const incomeTotal = income.reduce((total, amount)=>total + Number(amount.amount), 0);
-    const expensesTotal = expenses.reduce((total, amount)=>total + Number(amount.amount), 0);
+    const incomeTotal = income.reduce((total, amount)=>total + (amount.amount), 0);
+    const expensesTotal = expenses.reduce((total, amount)=>total + (amount.amount), 0);
 
-    const totalBalance = Number(incomeTotal - expensesTotal);
+    const totalBalance = (incomeTotal - expensesTotal);
     return (
         
         <div className="page">

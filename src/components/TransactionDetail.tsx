@@ -1,13 +1,15 @@
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import {TransactionContext} from "../context/TransactionContext";
+import TransactionContext from "../context/TransactionContext";
 
 export default function TransactionDetail(){
-    const {id} = useParams();
+    const {id} = useParams<{ id: string }>();
     const navigate = useNavigate();
 
-    const {transaction, setTransaction} = useContext(TransactionContext);
+    const context = useContext(TransactionContext)
+    if(!context) return <div>Loading...</div>
+    const {transaction, setTransaction} = context;
 
     const item = transaction.find(t => t.id === Number (id));
 
