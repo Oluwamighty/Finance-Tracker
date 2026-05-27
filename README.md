@@ -1,7 +1,7 @@
 # 💰 Personal Finance Tracker
 
-A fully functional personal finance tracking application built with React. 
-Track your income and expenses, view your real-time balance, and manage 
+A fully functional personal finance tracking application built with React and TypeScript.
+Track your income and expenses, view your real-time balance, and manage
 transactions across a multi-page interface.
 
 ## Features
@@ -17,19 +17,24 @@ transactions across a multi-page interface.
 ## Tech Stack
 
 - React 18
+- TypeScript
 - React Router v6
 - Context API
 - CSS (custom properties)
 
-## React Concepts Demonstrated
+## React & TypeScript Concepts Demonstrated
 
 - `useState` — local component state
 - `useEffect` — data fetching on mount
 - `useReducer` — complex form state management
 - `useContext` — global state without prop drilling
-- Custom `useFetch` hook — reusable data fetching
+- Custom `useFetch` hook — reusable data fetching with loading and error states
 - `useParams` + `useNavigate` — dynamic routing
 - Controlled forms + validation
+- Union types — `"Income" | "Expenses"`
+- Type narrowing — TypeScript infers types from logic
+- Typed hooks — `useReducer`, `useContext`, `useParams`
+- Typed events — `React.FormEvent<HTMLFormElement>`
 
 ## Getting Started
 
@@ -44,17 +49,17 @@ npm run dev
 
 ```
 src/
-├── context/
-│   └── TransactionContext.ts
-├── hooks/
-│   └── useFetch.ts
 ├── types/
 │   └── index.ts
+├── context/
+│   └── TransactionContext.tsx
+├── hooks/
+│   └── useFetch.ts
 ├── components/
-│   ├── Navbar.jsx
-│   ├── Dashboard.jsx
-│   ├── TransactionList.jsx
-│   ├── TransactionDetail.jsx
-│   └── AddTransaction.jsx
+│   ├── Navbar.tsx
+│   ├── Dashboard.tsx
+│   ├── TransactionList.tsx
+│   ├── TransactionDetail.tsx
+│   └── AddTransaction.tsx
 └── App.tsx
 ```
